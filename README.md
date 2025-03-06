@@ -19,12 +19,81 @@ Every query in this project was crafted to examine distinct trends in the Spotif
 
 --------
 
-### 1. 
-### 2. 
-### 3. 
-### 4. 
-### 5. 
+### 1. Top Performing Tracks & Artists
+```sql
+SELECT
+    track_name,
+    artist_name,
+    SUM(streams) AS total_streams
+FROM
+    spotify_charts_2023
+WHERE
+    streams IS NOT NULL
+GROUP BY
+    track_name, artist_name
+ORDER BY
+    total_streams DESC
+LIMIT 10;
 
+```
+### 2. Which months had the most newly released songs that became popular?
+```sql
+SELECT
+    released_month,
+    COUNT(*) AS popular_new_releases
+FROM
+    spotify_charts_2023
+WHERE
+    released_year = 2023
+GROUP BY
+    released_month
+ORDER BY
+    popular_new_releases DESC;
+
+```
+### 3. Platform-Specific Trends (Which songs appeared in the most playlists across platforms?)
+```sql
+SELECT
+    track_name,
+    artist_name,
+    (COALESCE(in_spotify_charts, 0) +
+    COALESCE(in_apple_charts, 0) +
+    COALESCE(in_deezer_charts, 0) +
+    COALESCE(in_shazam_charts, 0)) AS charts_count
+FROM spotify_charts_2023
+ORDER BY charts_count DESC
+LIMIT 10;
+
+```
+### 4. Streaming vs. Release Timing (Do older songs still perform well in 2023?)
+```sql
+SELECT
+    released_year,
+    SUM(streams) AS total_streams
+FROM
+    spotify_charts_2023
+GROUP BY
+    released_year
+ORDER BY total_streams DESC;
+
+```
+### 5. What Makes a Viral Song? (Are higher-energy songs more likely to be charted?) (Is there a correlation between BPM and streaming success?)
+```sql
+SELECT
+    energy_pct,
+    SUM(streams) AS total_streams,
+    SUM(COALESCE(in_spotify_charts, 0) +
+        COALESCE(in_apple_charts, 0) +
+        COALESCE(in_deezer_charts, 0) +
+        COALESCE(in_shazam_charts, 0)) AS total_chart_appearances
+FROM
+    spotify_charts_2023
+GROUP BY
+    energy_pct
+ORDER BY
+    total_chart_appearances DESC;
+
+```
 
 
 # What I Learned ??
