@@ -1,10 +1,15 @@
 # Overview
 
-Welcome to my analysis of the Spotify 2023 charts. This project was driven by my curiosity and a desire to apply SQL skills while exploring real-world music trends.
+Welcome to my analysis of the most streamed Spotify songs 2023. This project was driven by my curiosity and a desire to apply SQL skills while exploring real-world music trends.
 
-The data for this analysis is sourced from [Kaggle (Spotify 2023 Charts)](https://www.kaggle.com/datasets/nelgiriyewithana/top-spotify-songs-2023?resource=download), which provides detailed information on tracks, artists, streaming counts, and platform presence. Using SQL and dimensional modeling, I examine key questions such as which artists dominated the charts, how streaming trends evolved over the year, and what factors contribute to a song’s popularity.
+The data for this analysis is sourced from [Kaggle (Most Streamed Spotify Songs 2023)](https://www.kaggle.com/datasets/nelgiriyewithana/top-spotify-songs-2023?resource=download), which provides detailed information on tracks, artists, streaming counts, and platform presence. Using SQL and dimensional modeling, I examine key questions such as which artists dominated the charts, how streaming trends evolved over the year, and what factors contribute to a song’s popularity.
 
 # The Questions
+1. Top Performing Tracks & Artists
+2. Which months had the most newly released songs that became popular?
+3. Platform-Specific Trends (Which songs appeared in the most playlists across platforms?)
+4. Streaming vs. Release Timing (Do older songs still perform well in 2023?)
+5. What Makes a Viral Song? (Are higher-energy songs more likely to be charted?) (Is there a correlation between BPM and streaming success?)
 
 # Tools I Used
 
@@ -17,9 +22,8 @@ For my exploration of the Spotify 2023 charts, I worked with structured data to 
 # The Analysis
 Every query in this project was crafted to examine distinct trends in the Spotify 2023 charts. Here’s the approach I took for each analysis:
 
---------
-
 ### 1. Top Performing Tracks & Artists
+To identify the top-performing tracks, I aggregated all streaming data. 
 ```sql
 SELECT
     track_name,
@@ -36,6 +40,43 @@ ORDER BY
 LIMIT 10;
 
 ```
+### Visualize Data
+![Top songs](images/1_1_top_10_streamed_songs.png)
+*Bar graph visualizing the Top 10 most streamed songs on Spotify (2023); ChatGPT generated this graph from my SQL query results*
+
+### Insights:
+- "Blinding Lights" by The Weeknd dominates with over 37 billion streams.
+- Multiple collaborations feature in the top 10, showcasing the impact of joint artist efforts.
+- Songs from various years remain popular, proving longevity in streaming success.
+
+For artists, I first separated them in cases where multiple were listed and then combined the data to get a comprehensive view.
+```sql
+CREATE TABLE artist_song_mapping AS
+SELECT
+    track_name,
+    streams,
+    unnest(string_to_array(artist_name, ', ')) AS artist
+FROM spotify_charts_2023;
+
+SELECT
+    artist,
+    SUM(streams) AS total_streams
+FROM artist_song_mapping
+WHERE
+    streams IS NOT NULL
+GROUP BY artist
+ORDER BY total_streams DESC
+LIMIT 10;
+```
+### Visualize Data
+![Top Artists](images/1_2_top_10_streamed_artists.png)
+*Bar graph visualizing the Top 10 most streamed artists on spotify (2023); ChatGPT generated this graph from my SQL query results*
+
+### Insights:
+- The Weeknd and Bad Bunny lead as the most-streamed artists, surpassing 20 billion streams each.
+- Taylor Swift and Dua Lipa stand out as the most streamed female artists.
+- A mix of pop, hip-hop, and Latin music influences reflects diverse global listening trends.
+
 ### 2. Which months had the most newly released songs that became popular?
 ```sql
 SELECT
@@ -51,6 +92,15 @@ ORDER BY
     popular_new_releases DESC;
 
 ```
+### Visualize Data
+![Best Months](images/2_popular_new_releases_by_month.png)
+*Bar graph visualizing the Most Popular New Releases By Month (2023) ; ChatGPT generated this graph from my SQL query results*
+
+### Insights:
+- March had the highest number of popular new releases with 37 songs making an impact.
+- June and May followed closely, with 32 and 29 popular releases respectively.
+- July had the lowest count, indicating fewer successful new songs in that month.
+--------
 ### 3. Platform-Specific Trends (Which songs appeared in the most playlists across platforms?)
 ```sql
 SELECT
@@ -65,6 +115,12 @@ ORDER BY charts_count DESC
 LIMIT 10;
 
 ```
+### Visualize Data
+![]()
+*Bar graph visualizing the ; ChatGPT generated this graph from my SQL query results*
+
+### Insights:
+
 ### 4. Streaming vs. Release Timing (Do older songs still perform well in 2023?)
 ```sql
 SELECT
@@ -77,6 +133,12 @@ GROUP BY
 ORDER BY total_streams DESC;
 
 ```
+### Visualize Data
+![]()
+*Bar graph visualizing the ; ChatGPT generated this graph from my SQL query results*
+
+### Insights:
+
 ### 5. What Makes a Viral Song? (Are higher-energy songs more likely to be charted?) (Is there a correlation between BPM and streaming success?)
 ```sql
 SELECT
@@ -94,7 +156,11 @@ ORDER BY
     total_chart_appearances DESC;
 
 ```
+### Visualize Data
+![]()
+*Bar graph visualizing the ; ChatGPT generated this graph from my SQL query results*
 
+### Insights:
 
 # What I Learned ??
 

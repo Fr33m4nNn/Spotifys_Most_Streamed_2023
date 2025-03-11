@@ -11,3 +11,20 @@ GROUP BY
 ORDER BY
     total_streams DESC
 LIMIT 10;
+
+CREATE TABLE artist_song_mapping AS
+SELECT
+    track_name,
+    streams,
+    unnest(string_to_array(artist_name, ', ')) AS artist
+FROM spotify_charts_2023;
+
+SELECT
+    artist,
+    SUM(streams) AS total_streams
+FROM artist_song_mapping
+WHERE
+    streams IS NOT NULL
+GROUP BY artist
+ORDER BY total_streams DESC
+LIMIT 10;
