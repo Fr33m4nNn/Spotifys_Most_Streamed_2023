@@ -10,4 +10,5 @@ FROM
 GROUP BY
     energy_pct
 ORDER BY
-    total_chart_appearances DESC;
+    total_chart_appearances DESC
+LIMIT 20;

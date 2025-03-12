@@ -19,6 +19,8 @@ For my exploration of the Spotify 2023 charts, I worked with structured data to 
 - **DataGrip:** My preferred tool for managing databases and running SQL queries.
 - **Git & GitHub:** Crucial for version control, sharing SQL scripts, analyzing data, and tracking project progress.
 
+---
+
 # The Analysis
 Every query in this project was crafted to examine distinct trends in the Spotify 2023 charts. Here’s the approach I took for each analysis:
 
@@ -78,6 +80,7 @@ LIMIT 10;
 - A mix of pop, hip-hop, and Latin music influences reflects diverse global listening trends.
 
 ### 2. Which months had the most newly released songs that became popular?
+To determine which months had the most newly released songs that became popular, I counted the number of tracks released in 2023 that appeared in the charts and grouped them by month.
 ```sql
 SELECT
     released_month,
@@ -100,8 +103,9 @@ ORDER BY
 - March had the highest number of popular new releases with 37 songs making an impact.
 - June and May followed closely, with 32 and 29 popular releases respectively.
 - July had the lowest count, indicating fewer successful new songs in that month.
---------
+
 ### 3. Platform-Specific Trends (Which songs appeared in the most playlists across platforms?)
+To identify the songs that appeared in the most charts across platforms, I summed their presence in Spotify, Apple, Deezer, and Shazam charts and ranked them accordingly.
 ```sql
 SELECT
     track_name,
@@ -116,12 +120,17 @@ LIMIT 10;
 
 ```
 ### Visualize Data
-![]()
-*Bar graph visualizing the ; ChatGPT generated this graph from my SQL query results*
+![Most Peforming Tacks](images/3_platform_specific_trends.png)
+*Bar graph visualizing the Top Songs Appearing in the Most Playlists Across Platforms; ChatGPT generated this graph from my SQL query results*
 
 ### Insights:
 
+- "Makeba" by Jain topped the list with 1,674 playlist appearances.
+- David Kushner’s "Daylight" and Billie Eilish’s "What Was I Made For?" were also highly featured, appearing in over 1,500 playlists.
+- A mix of pop, rap, and alternative tracks dominated the charts, with collaborations like The Weeknd, Madonna & Playboi Carti’s "Popular" also making a strong impact.
+
 ### 4. Streaming vs. Release Timing (Do older songs still perform well in 2023?)
+o analyze whether older songs still performed well in 2023, I calculated the total streams for each release year and ranked them accordingly.
 ```sql
 SELECT
     released_year,
@@ -130,16 +139,20 @@ FROM
     spotify_charts_2023
 GROUP BY
     released_year
-ORDER BY total_streams DESC;
-
+ORDER BY total_streams DESC
+LIMIT 15;
 ```
 ### Visualize Data
-![]()
-*Bar graph visualizing the ; ChatGPT generated this graph from my SQL query results*
+![Steaming Performance vs. Release year](images/4_streaming_vs_release_timing.png)
+*Bar graph visualizing the Streaming Performance vs. Release Year; ChatGPT generated this graph from my SQL query results*
 
 ### Insights:
+- Recent dominance: Songs released in 2022 and 2021 amassed the highest total streams, suggesting newer music dominates streaming platforms.
+- Older hits remain relevant: Songs from 2019-2017 still perform well, indicating longevity for some tracks.
+- Classics still have an audience: Even songs from 2010 and earlier continue to generate significant streams, proving that older hits retain popularity.
 
 ### 5. What Makes a Viral Song? (Are higher-energy songs more likely to be charted?) (Is there a correlation between BPM and streaming success?)
+To explore the characteristics of viral songs, I examined the relationship between a track's energy level and its success, measuring total streams and chart appearances across platforms.
 ```sql
 SELECT
     energy_pct,
@@ -153,14 +166,23 @@ FROM
 GROUP BY
     energy_pct
 ORDER BY
-    total_chart_appearances DESC;
+    total_chart_appearances DESC
+LIMIT 20;
 
 ```
 ### Visualize Data
-![]()
-*Bar graph visualizing the ; ChatGPT generated this graph from my SQL query results*
+![Energy% vs Chart and Streams](images/5_energy_vs_steams.png)
+*Bar graph visualizing the Energy% vs Total Chart Appearances and Total Streams; ChatGPT generated this graph from my SQL query results*
 
 ### Insights:
+- No Strong Correlation Between Energy % and Chart Appearances
+- The scatter plot shows a spread-out distribution, indicating that higher-energy songs do not necessarily dominate the charts.
+Higher Energy % Does Not Guarantee More Streams
+- The second plot suggests that songs with both high and moderate energy levels can achieve high streaming numbers.
+Other Factors Likely Play a Bigger Role in Virality
+- Since energy % alone does not strongly correlate with success, factors like genre, artist popularity, and marketing likely influence chart appearances and streaming numbers more. ​​
+
+---
 
 # What I Learned ??
 
@@ -184,3 +206,26 @@ From the analysis, several general insights emerged:
 ### Closing Thoughts ??
 
 This project enhanced my SQL skills and provided valuable insights into the data analyst job market. The findings from the analysis serve as a guide to prioritizing skill development and job search efforts. Aspiring data analysts can better position themselves in a competitive job market by focusing on high-demand, high-salary skills. This exploration highlights the importance of continuous learning and adaptation to emerging trends in the field of data analytics.
+
+---
+
+# What I Learned 🎵
+Through this project, I refined my SQL skills while diving deep into the world of music streaming data:
+
+- **🔍 Dimensional Modeling:** Structured the dataset with fact and dimension tables for better query performance and analysis.
+- **📊 Advanced Querying:** Used complex joins, aggregate functions, and CTEs to extract meaningful insights from large datasets.
+- **📈 Data-Driven Insights:** Translated raw streaming data into actionable findings, improving my ability to analyze trends effectively.
+
+# Conclusions
+
+### Insights 🎶
+From the analysis, several key takeaways emerged:
+
+1. Top-Streamed Artists: The Weeknd and Bad Bunny dominated streaming numbers, showing their massive global reach.
+2. Release Timing Matters: Songs from recent years (especially 2022) received the most streams, but older hits still maintain strong popularity.
+3. Platform-Specific Popularity: Some songs performed exceptionally well across multiple streaming platforms, highlighting cross-platform appeal.
+4. Seasonal Trends in New Releases: March and June saw the highest number of new songs that became popular, suggesting industry release patterns.
+5. Evergreen Hits: Despite the dominance of new releases, some older tracks continue to amass significant streams, proving longevity matters.
+
+# Closing Thoughts 🎼
+This project strengthened my SQL abilities while providing fascinating insights into music streaming trends. Understanding how factors like release timing, artist popularity, and cross-platform performance impact streaming numbers is crucial for data-driven decision-making in the music industry. This exploration reinforced the power of SQL in uncovering trends and patterns hidden within large datasets.
